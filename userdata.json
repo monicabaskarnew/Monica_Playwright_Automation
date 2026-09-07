@@ -1,0 +1,13 @@
+{
+  "firstName": "Monica",
+  "lastName": "Baskar",
+  "street": "7th cross lane",
+  "city": "mandaveli",
+  "state": "TamilNadu",
+  "zipCode": "600028",
+  "phone": "9976757809",
+  "ssn": "89-0098-8789",
+  "username": "monica1",
+  "password": "test123",
+  "confirmPassword": "test123"
+}
