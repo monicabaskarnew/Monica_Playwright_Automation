@@ -1,15 +1,19 @@
 import { error } from "node:console";
-import dotenv from 'dotenv';
+import dotenv, { configDotenv } from 'dotenv';
 import path from 'path';
+import { CommonUtility } from "../utility/CommonUtility"; 
+import { getBaseURL } from "../utility/configenv";
 
 
-export class RegisterPage{
+
+export class RegisterPage extends CommonUtility{
     
-constructor(page)
+constructor(page,env)
 {
-this.page=page;
-   
-    this.registerlink= page.getByRole('link',{name :'Register',exact:true});
+    super(page);
+    this.page=page;  
+    this.env = process.env.TEST_ENV || 'dev';
+    this.registerlink= page.getByRole('link',{name :'Register'});
     this.firstname= page.locator('input[name="customer.firstName"]');
     this.lastname= page.locator('input[name="customer.lastName"]');
     this.address= page.locator('input[name="customer.address.street"]');
@@ -27,14 +31,8 @@ this.page=page;
 }
 async navigateto()
 {
-    let url=process.env.BASE_URL;
-    if(!url)
-    {
-        throw new Error("BASE_URL is not defined in the environment file");
-    }
-
-    await this.page.goto(url);
-
+    this.baseURL=getBaseURL(this.env);
+    await this.page.goto(this.baseURL);
 }
 
 async clickRegistrationlink()
@@ -43,7 +41,8 @@ async clickRegistrationlink()
 }
 async fillregistrationform(userData)
 {
-    await this.page.screenshot({ path: `screenshots/signup-${userData.username}.png` });
+    //await this.page.screenshot({ path: `screenshots/signup-${userData.username}.png` });
+    await this.takeScreenshot();
     await this.firstname.fill(userData.firstName);
     await this.lastname.fill(userData.lastName);
     await this.address.fill(userData.street);
@@ -55,12 +54,14 @@ async fillregistrationform(userData)
     await this.username.fill(userData.username);
     await this.password.fill(userData.password);
     await this.confirmpassword.fill(userData.confirmPassword);
-    await this.page.screenshot({ path: `screenshots/signup-${userData.username}.png` });
+   await this.takeScreenshot();
+   
    
 
 }
 async submitform()
 {
      await this.registerbtn.click();
+     await this.takeScreenshot();
 }
 }
